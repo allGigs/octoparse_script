@@ -39,7 +39,6 @@ refresh_token = None
 
 # Global list to track task results for summary table
 task_results = []
-
 def log_in(base_url_param, username_param, password_param, logger):
     global access_token, refresh_token
     logger.info('Get token:')
@@ -121,6 +120,7 @@ def refresh_token_function(base_url_param, current_refresh_token_param, logger):
         return False
 
 # --- Functions from Octoparse data V2 Helper file.py ---
+<<<<<<< HEAD
 def clear_task_data(base_url, access_token_param, task_id, task_name, task_type, logger):
     """Clear a specific task using the API. Returns structured result dictionary."""
     result = {
@@ -136,6 +136,11 @@ def clear_task_data(base_url, access_token_param, task_id, task_name, task_type,
     
     try:
         start_time = time.time()
+=======
+def clear_task_data(base_url, access_token_param, task_id, task_name, logger):
+    """Clear a specific task using the API."""
+    try:
+>>>>>>> 26ed78879ac129ef67670c08b68ff48566a227e4
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {access_token_param}'
@@ -145,6 +150,7 @@ def clear_task_data(base_url, access_token_param, task_id, task_name, task_type,
         logger.info(f"Using URL: {api_url}")
         payload = {"taskId": task_id}
         response = requests.post(api_url, headers=headers, json=payload)
+<<<<<<< HEAD
         response_time = time.time() - start_time
         
         result['status_code'] = response.status_code
@@ -167,6 +173,19 @@ def clear_task_data(base_url, access_token_param, task_id, task_name, task_type,
         result['status'] = 'ERROR'
         result['error_message'] = str(e)
         return result
+=======
+        logger.info(f"Response status code: {response.status_code}")
+        logger.info(f"Response content: {response.text}")
+        if response.status_code == 200:
+            logger.info(f"Successfully cleared task: {task_name}")
+            return True
+        else:
+            logger.warning(f"Failed to clear task '{task_name}'. Status code: {response.status_code}")
+            return False
+    except Exception as e:
+        logger.error(f"Error in clear_task_data: {str(e)}")
+        return False
+>>>>>>> 26ed78879ac129ef67670c08b68ff48566a227e4
 
 def start_task(base_url, access_token_param, task_id, task_name, logger):
     """Start a specific task using the Octoparse API."""
@@ -269,9 +288,12 @@ def get_automation_details_from_supabase(client: Client, logger_param) -> pandas
 
 def Clear_all_tasks(task_id_df, base_url_param, current_access_token, logger):
     """Clear all tasks specified in the task_id_df, logging their type (local/cloud)."""
+<<<<<<< HEAD
     global task_results
     task_results = []  # Reset results for this run
     
+=======
+>>>>>>> 26ed78879ac129ef67670c08b68ff48566a227e4
     logger.info("\nTask_ID dictionary contents:")
     required_columns = ['Task_ID', 'Company_name', 'Type'] # Changed 'type' to 'Type'
     missing_columns = [col for col in required_columns if col not in task_id_df.columns]
@@ -299,12 +321,17 @@ def Clear_all_tasks(task_id_df, base_url_param, current_access_token, logger):
     for task_id, task_name, task_type in all_tasks_tuples: # Unpack type here
         logger.info(f"\nProcessing task: {task_name} (ID: {task_id}), Type: {task_type}")
         logger.info(f"Attempting to clear data for {task_type} task: {task_name} (ID: {task_id})")
+<<<<<<< HEAD
         result = clear_task_data(base_url_param, current_access_token, task_id, task_name, task_type, logger)
         task_results.append(result)
+=======
+        clear_task_data(base_url_param, current_access_token, task_id, task_name, logger)
+>>>>>>> 26ed78879ac129ef67670c08b68ff48566a227e4
     
     logger.info("\nAll task clearing attempts finished.")
     # The "__main__" block will print the final "Script finished."
 
+<<<<<<< HEAD
 def generate_summary_table(task_results, logger):
     """Generate a formatted summary table of task results."""
     if not task_results:
@@ -367,6 +394,8 @@ def generate_summary_table(task_results, logger):
     logger.info("SUMMARY COMPLETE")
     logger.info("="*120)
 
+=======
+>>>>>>> 26ed78879ac129ef67670c08b68ff48566a227e4
 # Main execution block
 if __name__ == "__main__":
     # --- Setup Logging ---
@@ -429,10 +458,13 @@ if __name__ == "__main__":
             logger.info("\nLogin successful. Proceeding to clear tasks...")
             # Call the Clear_all_tasks function
             Clear_all_tasks(Task_ID_data, base_api_url, access_token, logger)
+<<<<<<< HEAD
             
             # Generate summary table
             generate_summary_table(task_results, logger)
             
+=======
+>>>>>>> 26ed78879ac129ef67670c08b68ff48566a227e4
             logger.info("\nScript finished.")
         else:
             logger.error("\nLogin successful, but access token was not obtained. Cannot proceed.")
